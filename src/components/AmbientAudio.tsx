@@ -7,29 +7,23 @@ export default function AmbientAudio() {
   const [isMuted, setIsMuted] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [audioInitialized, setAudioInitialized] = useState(false);
 
   useEffect(() => {
-    // Create audio element - file is in public/Audio/music.mp3
-    const audio = new Audio('public/Audio/music.mp3');
+    // ✅ Correct path: no "public/"
+    const audio = new Audio('/Audio/music.mp3');
     audio.loop = true;
-    audio.muted = true; // Start with audio muted
-    
-    // Preload the audio
+    audio.muted = true;
     audio.preload = 'auto';
-    
-    // Set up canplay event to know when audio is ready
+
     const handleCanPlay = () => {
       console.log('Audio can play');
       setIsLoading(false);
     };
-    
-    audio.addEventListener('canplay', handleCanPlay);
-    
-    audioRef.current = audio;
-    setAudioInitialized(true);
 
-    // Clean up
+    audio.addEventListener('canplay', handleCanPlay);
+
+    audioRef.current = audio;
+
     return () => {
       audio.removeEventListener('canplay', handleCanPlay);
       if (audioRef.current) {
@@ -44,21 +38,18 @@ export default function AmbientAudio() {
 
     try {
       if (isMuted) {
-        // Unmute and play
         audioRef.current.muted = false;
         await audioRef.current.play();
         console.log('Audio started playing');
       } else {
-        // Mute and pause
         audioRef.current.muted = true;
         audioRef.current.pause();
       }
       setIsMuted(!isMuted);
     } catch (error) {
       console.error('Error toggling audio:', error);
-      // If autoplay was prevented, show a message to the user
       if (error instanceof Error && error.name === 'NotAllowedError') {
-        alert('Please interact with the page first to enable audio playback');
+        alert('Please tap the page first to enable audio playback');
       }
     }
   };
