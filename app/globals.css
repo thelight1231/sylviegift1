@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --glow-purple: #a855f7;
+  --glow-blue: #3b82f6;
+  --glow-teal: #14b8a6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(168, 85, 247, 0.6); }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes reveal-up {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0);
+  }
+}
+
+@keyframes blur-clear {
+  0% { 
+    filter: blur(10px); 
+    letter-spacing: 0.5em; 
+    opacity: 0.3; 
+  }
+  100% { 
+    filter: blur(0); 
+    letter-spacing: 0; 
+    opacity: 1; 
+  }
+}
+
+.typewriter {
+  overflow: hidden;
+  border-left: 2px solid var(--glow-purple);
+  white-space: nowrap;
+  animation: typewriter 3s steps(30, end), blink 0.75s step-end infinite;
+}
+
+.star {
+  animation: twinkle 3s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+.star:hover {
+  animation-duration: 0.5s;
+  transform: scale(1.3);
+}
+
+.glow-hover {
+  transition: all 0.3s ease;
+}
+
+.glow-hover:hover {
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+  transform: translateY(-2px);
+}
+
+.journey-node {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.journey-node.visible {
+  animation: reveal-up 0.8s ease-out forwards;
+}
+
+.mirror-blur {
+  filter: blur(8px);
+  letter-spacing: 0.3em;
+  opacity: 0.5;
+  transition: all 0.5s ease;
+}
+
+.mirror-clear {
+  filter: blur(0);
+  letter-spacing: 0;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.prose-arabic {
+  font-family: var(--font-amiri);
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+}
+
+.heading-arabic {
+  font-family: var(--font-cairo);
+  font-weight: 600;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
