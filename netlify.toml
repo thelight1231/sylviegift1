@@ -6,6 +6,8 @@
 [build.environment]
   NODE_VERSION = "20.11.1"
   NPM_FLAGS = "--legacy-peer-deps"
+  # Disable Next.js plugin since we're using Vite
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
 
 [[redirects]]
   from = "/*"
