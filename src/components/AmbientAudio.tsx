@@ -10,8 +10,8 @@ export default function AmbientAudio() {
   const [audioInitialized, setAudioInitialized] = useState(false);
 
   useEffect(() => {
-    // Create audio element
-    const audio = new Audio('/Audio/music.mp3');
+    // Create audio element - file is in public/Audio/music.mp3
+    const audio = new Audio('public/Audio/music.mp3');
     audio.loop = true;
     audio.muted = true; // Start with audio muted
     
