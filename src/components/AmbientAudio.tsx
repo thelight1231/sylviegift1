@@ -5,16 +5,33 @@ import { Volume2, VolumeX } from 'lucide-react';
 
 export default function AmbientAudio() {
   const [isMuted, setIsMuted] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [audioInitialized, setAudioInitialized] = useState(false);
 
   useEffect(() => {
     // Create audio element
     const audio = new Audio('/Audio/music.mp3');
-    audio.loop = true; // Make the audio loop
+    audio.loop = true;
+    audio.muted = true; // Start with audio muted
+    
+    // Preload the audio
+    audio.preload = 'auto';
+    
+    // Set up canplay event to know when audio is ready
+    const handleCanPlay = () => {
+      console.log('Audio can play');
+      setIsLoading(false);
+    };
+    
+    audio.addEventListener('canplay', handleCanPlay);
+    
     audioRef.current = audio;
+    setAudioInitialized(true);
 
-    // Clean up audio on component unmount
+    // Clean up
     return () => {
+      audio.removeEventListener('canplay', handleCanPlay);
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
@@ -22,22 +39,28 @@ export default function AmbientAudio() {
     };
   }, []);
 
-  const toggleAudio = () => {
+  const toggleAudio = async () => {
     if (!audioRef.current) return;
 
-    if (isMuted) {
-      audioRef.current.play()
-        .then(() => {
-          console.log('Audio started playing');
-        })
-        .catch(error => {
-          console.error('Error playing audio:', error);
-        });
-    } else {
-      audioRef.current.pause();
+    try {
+      if (isMuted) {
+        // Unmute and play
+        audioRef.current.muted = false;
+        await audioRef.current.play();
+        console.log('Audio started playing');
+      } else {
+        // Mute and pause
+        audioRef.current.muted = true;
+        audioRef.current.pause();
+      }
+      setIsMuted(!isMuted);
+    } catch (error) {
+      console.error('Error toggling audio:', error);
+      // If autoplay was prevented, show a message to the user
+      if (error instanceof Error && error.name === 'NotAllowedError') {
+        alert('Please interact with the page first to enable audio playback');
+      }
     }
-    
-    setIsMuted(!isMuted);
   };
 
   return (
